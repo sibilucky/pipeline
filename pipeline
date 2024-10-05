@@ -1,0 +1,63 @@
+pipeline {
+    agent any // Run on any available agent
+
+    environment {
+        // Define environment variables
+        NODE_VERSION = '14'  // Example of an environment variable for Node.js version
+        APP_NAME = 'my-web-app'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the code from a Git repository
+                git 'https://github.com/username/my-web-app.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                // Install Node.js dependencies
+                sh 'npm install' // or any other package manager command
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Build the application
+                sh 'npm run build'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Run the tests
+                sh 'npm test'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Deploy the application (this is just an example)
+                sh "echo 'Deploying ${APP_NAME}'"
+                // Replace with actual deployment commands, e.g.:
+                // sh "scp -r build/ user@server:/path/to/deploy"
+            }
+        }
+    }
+
+    post {
+        success {
+            // Actions to take on successful completion
+            echo 'Build completed successfully!'
+        }
+        failure {
+            // Actions to take on failure
+            echo 'Build failed!'
+        }
+        always {
+            // Actions to take always, regardless of the outcome
+            echo 'Cleaning up...'
+        }
+    }
+}
